@@ -16,20 +16,19 @@ import java.util.Map;
 public class DC {
 	static List<String> stopWDict = new ArrayList<String>(), //停用词表
 						dict = new ArrayList<String>();//文档中所有非停用词的词干组成的词典
-	static int sizeOfDict;//词典大小
-	static int[] nij = new int[sizeOfDict];//第j个类别中有nij个文档出现了词i
-	static File trainingTextDir = new File("F:\\classification\\文档集-Newgroups 20");//训练语料存放目录
+	static int[] nij;//第j个类别中有nij个文档出现了词i
+	static File trainingTextDir = new File("文档集-Newgroups 20");//训练语料存放目录
 	static String[] classification = {"alt.atheism", "comp.graphics", "comp.os.ms-windows.misc", "comp.sys.ibm.pc.hardware", "comp.sys.mac.hardware",//训练语料分类集合
 								"comp.windows.x", "misc.forsale", "rec.autos", "rec.motorcycles", "rec.sport.baseball",
 								"rec.sport.hockey", "sci.crypt", "sci.electronics", "sci.med", "sci.space", 
 								"soc.religion.christian", "talk.politics.guns", "talk.politics.mideast", "talk.politics.misc", "talk.religion.misc"};
-    static int[] numOfDocInEachCla;//每个类别的文档数
+    static int[] numOfDocInEachCla = new int[20];//每个类别的文档数
 	public static void main(String[] args) {
 	    	loadStopWDict();
 		//createDict();
 		loadDict();
-		sizeOfDict = dict.size();
 		
+		nij = new int[dict.size()];
 		for (int i = 0; i < 20; i++) {
 			String[] textPath = readTextPath(i);
 			numOfDocInEachCla[i] = textPath.length;
@@ -121,7 +120,7 @@ public class DC {
 	}
 	public static void calcuNij(int k, int j) {//从第j个类别的第k组数据中统计nij，k∈[1, testTimes]
 		int i, m, p, et, minBound, maxBound;
-		for (i = 0; i < sizeOfDict; i++)
+		for (i = 0; i < dict.size(); i++)
 			nij[i] = 0;
 		et = numOfDocInEachCla[j] / 10;//第j个类别的每组数据的数目
 		minBound = (k - 1) * et;
